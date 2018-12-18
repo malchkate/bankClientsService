@@ -27,7 +27,7 @@ public class BankInfoRetrievalService {
         if (client.isPresent()) {
             return client.get().getCardList();
         } else{
-            return new ArrayList<>();  //todo think about right processing of this situation
+            return new ArrayList<>();
         }
     }
 
