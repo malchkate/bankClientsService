@@ -1,5 +1,7 @@
 package com.openway.DemoBankService.security.filter;
 
+import com.openway.DemoBankService.repository.BlacklistedTokenRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,14 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.openway.DemoBankService.security.util.SecurityConstants.*;
 
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager,
+                                  BlacklistedTokenRepository blacklistedTokenRepository) {
         super(authenticationManager);
+        this.blacklistedTokenRepository = blacklistedTokenRepository;
     }
 
     @Override
@@ -39,13 +45,19 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
-            String user = Jwts.parser()
+            Claims claims = Jwts.parser()
                     .setSigningKey(SECRET)
                     .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                    .getBody()
-                    .getSubject();
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()); //TODO Точно?
+                    .getBody();
+
+            if (claims.getExpiration().compareTo(new Date()) < 0){
+                return null;
+            }
+            if (blacklistedTokenRepository.existsById(token)){
+                return null;
+            }
+            if (claims.getSubject() != null ) {
+                return new UsernamePasswordAuthenticationToken(claims.getSubject(), null, new ArrayList<>());
             }
             return null;
         }

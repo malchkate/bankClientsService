@@ -40,7 +40,7 @@ public class BankOperationsRestController {
         String path = (String) updates.get("path");
         boolean newBlockingState = (Boolean) updates.get("value");
         if (path.equals("isBlocked")){
-            Optional<Card> updatedCard = bankInfoRetrievalService.changeCardBlockingState(id, newBlockingState);
+            Optional<Card> updatedCard = bankInfoRetrievalService.changeCardBlockingState(id, newBlockingState, principal.getName());
             if (updatedCard.isPresent()) {
                 return ResponseEntity.ok().body(updatedCard.get());
             } else {

@@ -52,9 +52,9 @@ public class BankInfoRetrievalService {
     }
 
     @Transactional
-    public Optional<Card> changeCardBlockingState(long cardId, boolean newBlockingState){
+    public Optional<Card> changeCardBlockingState(long cardId, boolean newBlockingState, String principalName){
         Optional<Card> card = cardRepository.findById(cardId);
-        if (card.isPresent()) {
+        if (card.isPresent() && card.get().getClient().getUsername().equals(principalName)) {
             card.get().setBlocked(newBlockingState);
             return Optional.of(cardRepository.save(card.get()));
         } else {

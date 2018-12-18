@@ -1,5 +1,6 @@
 package com.openway.DemoBankService.security;
 
+import com.openway.DemoBankService.repository.BlacklistedTokenRepository;
 import com.openway.DemoBankService.security.filter.JWTAuthenticationFilter;
 import com.openway.DemoBankService.security.filter.JWTAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +20,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, LOG_IN_URL).permitAll() //todo TRY to delete
+                .antMatchers(HttpMethod.POST, LOG_IN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, "/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()));
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), blacklistedTokenRepository));
     }
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
