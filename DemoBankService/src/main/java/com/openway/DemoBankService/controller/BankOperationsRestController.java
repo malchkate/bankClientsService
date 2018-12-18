@@ -1,8 +1,8 @@
 package com.openway.DemoBankService.controller;
 
 import com.openway.DemoBankService.model.Card;
-import com.openway.DemoBankService.model.Loan;
 import com.openway.DemoBankService.model.Deposit;
+import com.openway.DemoBankService.model.Loan;
 import com.openway.DemoBankService.service.BankInfoRetrievalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -30,9 +30,9 @@ public class BankOperationsRestController {
         return bankInfoRetrievalService.getDepositsListByUserName(principal.getName());
     }
 
-    @GetMapping("/credits")
-    public List<Loan> getCreditsList(Principal principal){
-        return bankInfoRetrievalService.getCreditsListByUserName(principal.getName());
+    @GetMapping("/loans")
+    public List<Loan> geLoansList(Principal principal){
+        return bankInfoRetrievalService.getLoansListByUserName(principal.getName());
     }
 
     @RequestMapping(value = "/card/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)

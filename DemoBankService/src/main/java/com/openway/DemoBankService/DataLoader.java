@@ -2,12 +2,12 @@ package com.openway.DemoBankService;
 
 import com.openway.DemoBankService.model.Card;
 import com.openway.DemoBankService.model.Client;
-import com.openway.DemoBankService.model.Loan;
 import com.openway.DemoBankService.model.Deposit;
+import com.openway.DemoBankService.model.Loan;
 import com.openway.DemoBankService.repository.CardRepository;
 import com.openway.DemoBankService.repository.ClientRepository;
-import com.openway.DemoBankService.repository.LoanRepository;
 import com.openway.DemoBankService.repository.DepositRepository;
+import com.openway.DemoBankService.repository.LoanRepository;
 import com.openway.DemoBankService.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;

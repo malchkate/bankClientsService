@@ -2,8 +2,8 @@ package com.openway.DemoBankService.service;
 
 import com.openway.DemoBankService.model.Card;
 import com.openway.DemoBankService.model.Client;
-import com.openway.DemoBankService.model.Loan;
 import com.openway.DemoBankService.model.Deposit;
+import com.openway.DemoBankService.model.Loan;
 import com.openway.DemoBankService.repository.CardRepository;
 import com.openway.DemoBankService.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class BankInfoRetrievalService {
     }
 
     @Transactional
-    public List<Loan> getCreditsListByUserName(String userName){
+    public List<Loan> getLoansListByUserName(String userName){
         Optional<Client> client = clientRepository.findByUsername(userName);
         if (client.isPresent()) {
             return client.get().getLoanList();
